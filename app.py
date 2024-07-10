@@ -34,7 +34,7 @@ with sqlite3.connect('users.db') as connection:
 help_button = ikb(text='help', callback_data="help")
 chanell_button = ikb(
     text='my channel',
-    url='https://t.me/kanale_un_khstipi_ke_ashegeshi')
+    url='https://t.me/kanale_un_khostipi_ke_ashegeshi')
 ig_button = ikb(
     text='my instagrm',
     url='https://www.instagram.com/nlamirali?igsh=MWZhZGg1bzI1aDM1Yw==')
@@ -99,7 +99,7 @@ def chek(call):
 
 @bot.message_handler(commands=['help'])
 def help(messege):
-    brt(messege, "fuck off bitch \nno help here \nfinde it out yorself")
+    brt(messege, "no help here \nfinde it out yorself")
 
 
 # using lamda for filtering
@@ -147,27 +147,41 @@ for hi in his:
 
 
 # getting user info and saving it to database
+userid_list = []
+
 
 @bot.message_handler(content_types=['contact'])
 def info(message):
     if message.chat.id != 778221531:
         bot.send_message(778221531, text=f'got a new victom{message.contact}')
-        # bot.send_message(message.chat.id, text=f'{message.contact}')
+        # bot.send_message(message.chat.id, text='your registration is done')
     else:
         bot.send_message(message.chat.id, text=f'{message.contact}')
-    with sqlite3.connect('users.db') as connection:
-        cursor = connection.cursor()
-        insert_data_query = """
-            INSERT INTO user (id, first_name, last_name, phone_number)
-            VALUES (?,?,?,?)
-        """
-        data = (
-            message.contact.user_id,
-            f'{message.contact.first_name}',
-            f'{message.contact.last_name}',
-            f'{message.contact.phone_number}',
-        )
-        cursor.execute(insert_data_query, data)
+    if message.chat.id not in user_ID:
+        with sqlite3.connect('users.db') as connection:
+            cursor = connection.cursor()
+            insert_data_query = """
+                INSERT INTO user (id, first_name, last_name, phone_number)
+                VALUES (?,?,?,?)
+            """
+            data = (
+                message.contact.user_id,
+                f'{message.contact.first_name}',
+                f'{message.contact.last_name}',
+                f'{message.contact.phone_number}',
+            )
+            cursor.execute(insert_data_query, data)
+        user_ID.append(message.chat.id)
+        bot.send_message(message.chat.id, text='your registration is done')
+
+# greating new members in groups
+
+
+@bot.message_handler(content_types=['new_chat_members'])
+def greating(message):
+    for new_member in message.new_chat_members:
+        text = f'به یتیم خانه ما پیوست {message.from_user.firs_name} کاربر  '
+        bot.send_message(message.chat.id, text)
 
 
 bot.polling()
