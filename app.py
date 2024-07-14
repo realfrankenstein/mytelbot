@@ -183,9 +183,8 @@ def info(message):
 
 @bot.message_handler(content_types=['new_chat_members'])
 def greating(message):
-    for new_member in message.new_chat_members:
-        text = f'به یتیم خانه ما پیوست {message.from_user.firs_name} کاربر  '
-        bot.send_message(message.chat.id, text)
+    wtext = f'گاربر \n{message.from_user.first_name}\n به یتم خانه ما پیوست.'
+    bot.send_message(message.chat.id, text=wtext)
 
 
 bot.polling()
