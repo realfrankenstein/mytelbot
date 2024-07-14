@@ -157,7 +157,7 @@ def info(message):
         # bot.send_message(message.chat.id, text='your registration is done')
     else:
         bot.send_message(message.chat.id, text=f'{message.contact}')
-    if message.chat.id not in user_ID:
+    if message.chat.id not in userid_list:
         with sqlite3.connect('users.db') as connection:
             cursor = connection.cursor()
             insert_data_query = """
@@ -171,8 +171,11 @@ def info(message):
                 f'{message.contact.phone_number}',
             )
             cursor.execute(insert_data_query, data)
-        user_ID.append(message.chat.id)
+        userid_list.append(message.chat.id)
         bot.send_message(message.chat.id, text='your registration is done')
+    else:
+        bot.send_message(
+            message.chat.id, text='looks like you have already registered')
 
 # greating new members in groups
 
