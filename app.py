@@ -150,29 +150,30 @@ for hi in his:
 userid_list = []
 
 
+def add_info(message):
+    with sqlite3.connect('users.db') as connection:
+        cursor = connection.cursor()
+        insert_data_query = """
+                    INSERT INTO user (id, first_name, last_name, phone_number)
+                    VALUES (?,?,?,?)
+                """
+        data = (
+            message.contact.user_id,
+            f'{message.contact.first_name}',
+            f'{message.contact.last_name}',
+            f'{message.contact.phone_number}',
+        )
+        cursor.execute(insert_data_query, data)
+
+
 @bot.message_handler(content_types=['contact'])
 def info(message):
-    if message.chat.id != 778221531:
-        bot.send_message(778221531, text=f'got a new victom{message.contact}')
-        # bot.send_message(message.chat.id, text='your registration is done')
-    else:
-        bot.send_message(message.chat.id, text=f'{message.contact}')
     if message.chat.id not in userid_list:
-        with sqlite3.connect('users.db') as connection:
-            cursor = connection.cursor()
-            insert_data_query = """
-                INSERT INTO user (id, first_name, last_name, phone_number)
-                VALUES (?,?,?,?)
-            """
-            data = (
-                message.contact.user_id,
-                f'{message.contact.first_name}',
-                f'{message.contact.last_name}',
-                f'{message.contact.phone_number}',
-            )
-            cursor.execute(insert_data_query, data)
+        add_info(message)
+
         userid_list.append(message.chat.id)
         bot.send_message(message.chat.id, text='your registration is done')
+        bot.send_message(778221531, text=f'new victom: {message.contact}')
     else:
         bot.send_message(
             message.chat.id, text='looks like you have already registered')
