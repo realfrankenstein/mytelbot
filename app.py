@@ -38,6 +38,10 @@ chanell_button = ikb(
 ig_button = ikb(
     text='my instagrm',
     url='https://www.instagram.com/nlamirali?igsh=MWZhZGg1bzI1aDM1Yw==')
+linkdin_button = ikb(
+    text="my linkedin", url='https://www.linkedin.com/in/amir-liqvany-676788318?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BzUqqikfPRRa9rRq0TAivkw%3D%3D')
+github_button = ikb(text="my git-hub",
+                    url='https://github.com/realfrankenstein')
 help_bt = ikb(text="/help")
 links_box_bt = ikb(text="/links")
 hi_bt = ikb(text="hi")
@@ -46,11 +50,12 @@ register_bt = KeyboardButton(text='register', request_contact=True)
 
 # my inline keyboard
 inline_keyboard = ikm(row_width=1)
-inline_keyboard.add(chanell_button, ig_button, help_button)
+inline_keyboard.add(chanell_button, ig_button,
+                    linkdin_button, github_button, help_button)
 
 # my reply keyboard
 reply_kb = rkm(resize_keyboard=True, one_time_keyboard=False, row_width=2)
-reply_kb.add(help_bt, links_box_bt, hi_bt, register_bt)
+reply_kb.add(help_bt, links_box_bt, register_bt)
 
 
 # start
@@ -61,6 +66,7 @@ def welcome(messege):
     # saves the user id
     if messege.chat.id not in user_ID:
         user_ID.append(messege.chat.id)
+        print(messege.chat.id)
 
 # send any messege for all users
 
