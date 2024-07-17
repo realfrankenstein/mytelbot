@@ -136,7 +136,7 @@ def handle(message):
 # regular exprssion
 
 
-his = ["سلام", "سیلام", "سلم", "hi", 'hey', "های"]
+his = [" سلام ", " سیلام ", " سلم ", " hi ", ' hey ', " های "]
 hibacks = ["سلام به سس عمه ت ", "سلام و کیر خر ",
            "کیرم تو سلامت ", "hi yourself",
            "این بار کاریت ندارم علیک سلام"]
@@ -206,15 +206,15 @@ def admin_chek(chat_id, user_is):
     return False
 
 
-@bot.message_handler(func=lambda message: message.text="pin")
+@bot.message_handler(func=lambda message: message.text == "pin")
 def pin_message(message):
     chat_id = message.chat.id
     user_id = message.from_user.id
 
     if admin_chek(chat_id, user_id):
-        if message.replay_to_message:
-            bot.pin_chat_message(chat_id, message.replay_to_message.message.id)
-            brt(message.replay_to_message, "زدمش روی در طویله که همه ببینه ")
+        if message.reply_to_message:
+            bot.pin_chat_message(chat_id, message.reply_to_message.message_id)
+            brt(message.reply_to_message, "زدمش روی در طویله که همه ببینه ")
         else:
             brt(message, "شماره ننتو بزنم بالا در ؟")
     else:
