@@ -10,7 +10,7 @@ bot = telebot.TeleBot(bot.tok, )
 
 brt = bot.reply_to
 
-user_ID = []
+startesrs = []
 # my shortvuts
 ikb = InlineKeyboardButton
 ikm = InlineKeyboardMarkup
@@ -64,8 +64,8 @@ def welcome(messege):
     bot.send_message(messege.chat.id, "welcome to my dead mind",
                      reply_markup=reply_kb)
     # saves the user id
-    if messege.chat.id not in user_ID:
-        user_ID.append(messege.chat.id)
+    if messege.chat.id not in startesrs:
+        startesrs.append(messege.chat.id)
         print(messege.chat.id)
 
 # send any messege for all users
@@ -73,7 +73,7 @@ def welcome(messege):
 
 @bot.message_handler(commands=['send'])
 def send_any(messaege):
-    for id in user_ID:
+    for id in startesrs:
         bot.send_message(id, 'sokhum sana')
 
 # to see list of users
@@ -81,7 +81,7 @@ def send_any(messaege):
 
 @bot.message_handler(commands=['list'])
 def show_list(messege):
-    for id in user_ID:
+    for id in startesrs:
         print(id)
 
 # my link box
@@ -184,6 +184,9 @@ def info(message):
         bot.send_message(
             message.chat.id, text='looks like you have already registered')
 
+
+'''using robots in groups and channels'''
+
 # greating new members in groups
 
 
@@ -191,6 +194,31 @@ def info(message):
 def greating(message):
     wtext = f'گاربر \n{message.from_user.first_name}\n به یتم خانه ما پیوست.'
     bot.send_message(message.chat.id, text=wtext)
+
+# cheking if a member of a group is an admin
+
+
+def admin_chek(chat_id, user_is):
+    admins = bot.get_chat_administrators(chat_id)
+    for admin in admins:
+        if admin.user.id == user_is:
+            return True
+    return False
+
+
+@bot.message_handler(func=lambda message: message.text="pin")
+def pin_message(message):
+    chat_id = message.chat.id
+    user_id = message.from_user.id
+
+    if admin_chek(chat_id, user_id):
+        if message.replay_to_message:
+            bot.pin_chat_message(chat_id, message.replay_to_message.message.id)
+            brt(message.replay_to_message, "زدمش روی در طویله که همه ببینه ")
+        else:
+            brt(message, "شماره ننتو بزنم بالا در ؟")
+    else:
+        brt(message.chat.id, "only members can pin messages!!")
 
 
 bot.polling()
