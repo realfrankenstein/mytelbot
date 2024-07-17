@@ -205,6 +205,8 @@ def admin_chek(chat_id, user_is):
             return True
     return False
 
+# mangement of pinning messages by bot in order of admins
+
 
 @bot.message_handler(func=lambda message: message.text == "pin")
 def pin_message(message):
@@ -214,11 +216,21 @@ def pin_message(message):
     if admin_chek(chat_id, user_id):
         if message.reply_to_message:
             bot.pin_chat_message(chat_id, message.reply_to_message.message_id)
-            brt(message.reply_to_message, "زدمش روی در طویله که همه ببینه ")
+            brt(message.reply_to_message, "زدمش رو در طویله که همه ببینه ")
         else:
             brt(message, "شماره ننتو بزنم بالا در ؟")
     else:
         brt(message.chat.id, "only members can pin messages!!")
+
+# sending a message using the bot
+
+
+@bot.message_handler(regexp="//write")
+def bot_send(message):
+    to_say_text = message.text.split()
+    # removes the '//write' at the begining
+    to_say_text.pop(0)
+    bot.send_message(message.chat.id, text=' '.join(to_say_text))
 
 
 bot.polling()
